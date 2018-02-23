@@ -11,20 +11,20 @@ public class MancalaDriver {
         Board board = new Board(rows, columns, 1, startingSeeds);
         board.initializeBoard();
 
+        int currPlayer = 1; //1 for player, 0 for cpu
+
         boolean go = true;
         while (go) {
             board.displayBoardState();
-            int currRow = 1; //should be set to 1 for player row, 0 for computer row.
             System.out.print("\n\tPlease enter a move to make (1 to 10)");
             String choice = in.next();
             try {
                 int choiceInt = Integer.parseInt(choice);
-                Hole result = board.playerMove(new Hole(1, choiceInt));
-                while (result.getPos1() > 0)
+                Hole result = board.playerMove(new Hole(currPlayer, choiceInt), currPlayer);
+                while (result.getPos1() > -1)
                 {
-                    result = board.playerMove(new Hole(currRow, result.getPos2()));
+                    result = board.playerMove(result, currPlayer);
                 }
-
 
 
             } catch(NumberFormatException e){

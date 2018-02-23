@@ -48,45 +48,101 @@ public class Board {
         {
             System.out.print("P" + jp + ": " + board[rows-1][jp] + " ");
         }
-        System.out.print("\n\tPlayer's Basket: " + board[0][columns-1]);
+        System.out.print("\n\tPlayer's Basket: " + board[1][columns-1]);
     }
 
-    public Hole playerMove(Hole choice)
+    /*
+    playerMove(Hole, int) takes a hole choice and a currentPlayer. It then moves all the seeds
+    out of the hole chosen, dropping one by one into the subsequent holes. When it encounters a basket,
+    if it is the player's basket whose turn it is, it will drop one into the hole, otherwise it will skip it.
+    It is intended to be called again and again using the last hole it drops a seed in, assuming
+    there is more than one seed in the final hole. The function will return a hole for this purpose, and
+    a hole that is (-1, -1) to tell the driver not to continue calling the function.
+     */
+    //FUNCTION STATUS: WORKING
+    public Hole playerMove(Hole choice, int currPlayer)
     {
-        int seedsInHand = board[rows-1][choice.getPos2()];
-        board[rows-1][choice.getPos2()] = 0;
+        int seedsInHand = board[choice.getPos1()][choice.getPos2()];
+        board[choice.getPos1()][choice.getPos2()] = 0;
+        //System.out.println("Seeds in Hand: " + seedsInHand);
+        //moves to the next position, +1 if player side, -1 if computer side.
+        if (choice.getPos1() == 1)
+        {
+            choice.incPos2();
+        }
+        else
+        {
+            choice.decPos2();
+        }
         while (seedsInHand > 0)
         {
-            if (currRow == 1) //if the player row
+            if (choice.getPos1() == 1) //if the player row
             {
-                choice.incPos2();
-                board[rows - 1][choice.getPos2()]++;
-                seedsInHand--;
-                if (choice.getPos2() >= columns - 1)
+                //if the last column on the player side
+                if (choice.getPos2() == columns-1)
                 {
-                    //flip boardSide and continue
-                    currRow--;
-                    board[0][choice.getPos2()]++;
+                    //if the current player is the User
+                    if (currPlayer == 1) {
+                        board[choice.getPos1()][choice.getPos2()]++; //add one to the user's basket
+                        seedsInHand--; //subtract one from seeds in hand
+                    }
+                    if (seedsInHand > 0) {
+                        //flip boardSide to computer side and continue
+                        choice.decPos1();
+                        choice.decPos2();
+                    }
+
+                    //board[choice.getPos1()][choice.getPos2()]++;
                 }
+                else {
+                    board[choice.getPos1()][choice.getPos2()]++; //add one to the current hole
+                    seedsInHand--; //subtract one from seeds in hand
+                    if (seedsInHand > 0)
+                    {
+                        //go to the next hole if there are more seeds in hand
+                        choice.incPos2();
+                    }
+                }
+
+
             }
             else //if the computer row
             {
-                choice.decPos2();
-                board[0][choice.getPos2()]++;
-                seedsInHand--;
-                if (choice.getPos2() <= 1)
+                //if the first index
+                if (choice.getPos2() == 0)
                 {
-                    //flip the boardSide and continue
-                    currRow++;
-                    board[rows-1][choice.getPos2()]++;
+                    //if the current player is the Computer
+                    if (currPlayer == 0) {
+                        board[choice.getPos1()][choice.getPos2()]++; //add one to computer basket
+                        seedsInHand--; //subtract one from seeds in hand
+                    }
+                    if (seedsInHand > 0) {
+                        //flip the boardSide to the player side and continue
+                        choice.incPos1();
+                        choice.incPos2();
+                    }
+
                 }
+                else {
+                    board[choice.getPos1()][choice.getPos2()]++;//add one to the current hole
+                    seedsInHand--; //subtract one from seeds in hand
+                    if (seedsInHand > 0) {
+                        choice.decPos2(); //if there are seeds in hand, move to next hole on computer's side.
+                    }
+                }
+
+
             }
         }
-        if (board[currRow][choice.getPos2()] <= 0)
+        if (board[choice.getPos1()][choice.getPos2()] <= 1)
         {
+            //System.out.println("RETURN -1");
             return new Hole(-1, -1); //tells the driver to not continue with "sowing"
         }
-        return new Hole(currRow, choice.getPos2());
+        else {
+            System.out.println(choice);
+            return choice; //tells the driver where to continue with sowing
+        }
     }
 
 }

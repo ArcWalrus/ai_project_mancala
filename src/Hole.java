@@ -46,4 +46,10 @@ public class Hole {
     {
         this.pos2--;
     }
+
+    @Override
+    public String toString()
+    {
+        return ("(" + this.pos1 + ", " + this.pos2 + ")");
+    }
 }
