@@ -22,7 +22,7 @@ public class MancalaDriver {
                 int choiceInt = Integer.parseInt(choice);
                 Hole result = board.playerMove(new Hole(currPlayer, choiceInt), currPlayer);
                 //while the result is valid and not a player basket.
-                while (result.getPos1() > -1 && (result.getPos2() < 11 && result.getPos2() > 0))
+                while (result.getPos1() > -1 && (result.getPos2() < columns-1 && result.getPos2() > 0))
                 {
                     result = board.playerMove(result, currPlayer);
                 }
