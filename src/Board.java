@@ -4,6 +4,7 @@ public class Board {
     private int startingSeeds;
     private int[][] board;
     private int currRow;//SHOULD ONLY BE 0 OR 1, 1 for Player Row, 0 for Computer Row
+    private int h_value;
     //Constructor
     public Board(int rows, int columns, int currRow, int startingSeeds)
     {
@@ -12,8 +13,18 @@ public class Board {
         this.currRow = currRow;
         this.startingSeeds = startingSeeds;
         this.board = new int[this.rows][this.columns];
+        this.h_value = 0;
     }
 
+    public int getRows(){
+        return this.rows;
+    }
+    public int getCols(){
+        return this.columns;
+    }
+    public int getHoleValue(int row, int col){
+        return board[row][col];
+    }
     /*
     initializeBoard(..) takes the board and sets all the pieces.
     The board will start with three seeds in each hole, except for
@@ -38,7 +49,7 @@ public class Board {
     */
     public void displayBoardState()
     {
-        System.out.print("\tComputer's Basket: " + board[0][0] + "\n");
+        System.out.print("\n\tComputer's Basket: " + board[0][0] + "\n");
         for (int jc = 1; jc < columns-1; jc++)
         {
             System.out.print("C" + jc + ": " + board[0][jc] + " ");
@@ -48,7 +59,7 @@ public class Board {
         {
             System.out.print("P" + jp + ": " + board[rows-1][jp] + " ");
         }
-        System.out.print("\n\tPlayer's Basket: " + board[1][columns-1]);
+        System.out.println("\n\tPlayer's Basket: " + board[1][columns-1]);
     }
 
     /*
@@ -60,7 +71,7 @@ public class Board {
     a hole that is (-1, -1) to tell the driver not to continue calling the function.
      */
     //FUNCTION STATUS: WORKING
-    public Hole playerMove(Hole choice, int currPlayer)
+    private Hole playerMove(Hole choice, int currPlayer)
     {
         int seedsInHand = board[choice.getPos1()][choice.getPos2()];
         board[choice.getPos1()][choice.getPos2()] = 0;
@@ -137,12 +148,62 @@ public class Board {
         if (board[choice.getPos1()][choice.getPos2()] <= 1)
         {
             //System.out.println("RETURN -1");
-            return new Hole(-1, -1); //tells the driver to not continue with "sowing"
+            return new Hole(-1, -1); //tells makeMove() to not continue with "sowing"
         }
         else {
-            System.out.println(choice);
-            return choice; //tells the driver where to continue with sowing
+            //System.out.println(choice);
+            return choice; //tells makeMove() where to continue with sowing
         }
+    }
+
+    /*
+    makeMove(int, int) calls playerMove on the result of playerMove over and over until
+    the player should stop moving.
+     */
+    public Board makeMove(int currPlayer, int choice){
+        Hole result = playerMove(new Hole(currPlayer, choice), currPlayer);
+        //while the result is valid and not a player basket.
+        while (result.getPos1() > -1 && (result.getPos2() < columns-1 && result.getPos2() > 0))
+        {
+            result = playerMove(result, currPlayer);
+        }
+        assignHVal();
+        return this;
+    }
+
+
+    //assignHVal() sets the heuristic value of the board to number of seeds in CPU basket - Human basket
+    private void assignHVal(){
+        this.h_value = board[0][0] - board[1][columns-1];
+    }
+
+    public int getHValue(){
+        return h_value;
+    }
+    //Returns true if there cannot be any more moves made.
+    public boolean checkIfWon(){
+        boolean finished = false;
+        int cpuCount = 0;
+        int playerCount = 0;
+        for (int i = 1; i < columns-1; i++){
+            cpuCount += board[0][i];
+            playerCount += board[rows-1][i];
+        }
+        if (cpuCount <= 0 && playerCount > 0) //if cpu board state is 0 or less for whatever reason
+        {
+            finished = true;
+            board[rows-1][columns-1] += playerCount; //add the remaining seeds in player row to player basked
+        }
+        else if (playerCount <= 0 && cpuCount > 0) //if player board state is 0 or less for whatever reason
+        {
+            finished = true;
+            board[0][0] += cpuCount; //add the remaining seeds in the cpu row to the cpu basket
+        }
+        else if (playerCount <= 0 && cpuCount <= 0)
+        {
+            finished = true;
+        }
+        return finished;
     }
 
 }

@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 public class MancalaDriver {
-    private static int rows = 2; //should always be 2
-    private static int columns = 12; //columns must always be greater >= 2
-    private static int startingSeeds = 3; //The amount of seeds to place in each hole to initialize the board
+    private static final int rows = 2; //should always be 2
+    private static final int columns = 12; //columns must always be greater >= 2
+    private static final int startingSeeds = 3; //The amount of seeds to place in each hole to initialize the board
 
     public static void main(String[] args)
     {
@@ -16,16 +16,16 @@ public class MancalaDriver {
         boolean go = true;
         while (go) {
             board.displayBoardState();
+            Node<Board> n1 = new Node(board);
+            Tree tree = new Tree(n1);
+            tree.genTree(n1, currPlayer);
             System.out.print("\n\tPlease enter a move to make (1 to 10)");
             String choice = in.next();
             try {
                 int choiceInt = Integer.parseInt(choice);
-                Hole result = board.playerMove(new Hole(currPlayer, choiceInt), currPlayer);
-                //while the result is valid and not a player basket.
-                while (result.getPos1() > -1 && (result.getPos2() < columns-1 && result.getPos2() > 0))
-                {
-                    result = board.playerMove(result, currPlayer);
-                }
+                board.makeMove(currPlayer, choiceInt);
+                System.out.println("Current h value: " + board.getHValue());
+
 
 
             } catch(NumberFormatException e){

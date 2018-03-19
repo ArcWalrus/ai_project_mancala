@@ -1,14 +1,12 @@
 import java.util.ArrayList;
 
 public class Node<T> {
-    private T data = null;
+    private T data;
     private ArrayList<Node<T>> children = new ArrayList<Node<T>>();
     private Node<T> parent = null;
-    private int h_value;
 
-    public Node(T data, int h_value){
+    public Node(T data){
         this.data = data;
-        this.h_value = h_value;
     }
 
     public ArrayList<Node<T>> getChildren(){
@@ -27,6 +25,11 @@ public class Node<T> {
         this.data = data;
     }
 
+    public T getData()
+    {
+        return this.data;
+    }
+
     public void setChildren(ArrayList<Node<T>> children)
     {
         //Sets multiple nodes to the same parent
@@ -43,8 +46,5 @@ public class Node<T> {
         return child;
     }
 
-    public int getHVal(){
-        return this.h_value;
-    }
 
 }
