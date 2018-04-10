@@ -13,18 +13,21 @@ public class MancalaDriver {
 
         int currPlayer = 1; //1 for player, 0 for cpu
 
+        Board board2 = new Board(rows, columns, 1, startingSeeds);
+        Node<Board> n1 = new Node(board2);
+        Tree tree = new Tree(n1, currPlayer);
+        n1 = tree.genTree(n1, currPlayer, 1);
+
         boolean go = true;
         while (go) {
             board.displayBoardState();
-            Node<Board> n1 = new Node(board);
-            Tree tree = new Tree(n1);
-            tree.genTree(n1, currPlayer);
+
             System.out.print("\n\tPlease enter a move to make (1 to 10)");
             String choice = in.next();
             try {
                 int choiceInt = Integer.parseInt(choice);
                 board.makeMove(currPlayer, choiceInt);
-                System.out.println("Current h value: " + board.getHValue());
+                //System.out.println("Current h value: " + board.getHValue());
 
 
 

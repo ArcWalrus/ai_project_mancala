@@ -1,4 +1,4 @@
-public class Board {
+public class Board implements Cloneable {
     private int rows;
     private int columns;
     private int startingSeeds;
@@ -68,7 +68,7 @@ public class Board {
     if it is the player's basket whose turn it is, it will drop one into the hole, otherwise it will skip it.
     It is intended to be called again and again using the last hole it drops a seed in, assuming
     there is more than one seed in the final hole. The function will return a hole for this purpose, and
-    a hole that is (-1, -1) to tell the driver not to continue calling the function.
+    a hole that is (-1, -1) to tell makeMove() not to continue calling the function.
      */
     //FUNCTION STATUS: WORKING
     private Hole playerMove(Hole choice, int currPlayer)
@@ -167,7 +167,7 @@ public class Board {
         {
             result = playerMove(result, currPlayer);
         }
-        assignHVal();
+        //assignHVal();
         return this;
     }
 
@@ -192,17 +192,18 @@ public class Board {
         if (cpuCount <= 0 && playerCount > 0) //if cpu board state is 0 or less for whatever reason
         {
             finished = true;
-            board[rows-1][columns-1] += playerCount; //add the remaining seeds in player row to player basked
+            //board[rows-1][columns-1] += playerCount; //add the remaining seeds in player row to player basked
         }
         else if (playerCount <= 0 && cpuCount > 0) //if player board state is 0 or less for whatever reason
         {
             finished = true;
-            board[0][0] += cpuCount; //add the remaining seeds in the cpu row to the cpu basket
+            //board[0][0] += cpuCount; //add the remaining seeds in the cpu row to the cpu basket
         }
         else if (playerCount <= 0 && cpuCount <= 0)
         {
             finished = true;
         }
+        assignHVal();
         return finished;
     }
 
