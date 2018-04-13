@@ -181,30 +181,44 @@ public class Board implements Cloneable {
         return h_value;
     }
     //Returns true if there cannot be any more moves made.
-    public boolean checkIfWon(){
-        boolean finished = false;
-        int cpuCount = 0;
-        int playerCount = 0;
-        for (int i = 1; i < columns-1; i++){
-            cpuCount += board[0][i];
-            playerCount += board[rows-1][i];
+    public int checkIfWon(){
+        boolean finishedP = true; //if the player is finished
+        boolean finishedC = true; //if the CPU is finished
+        int winner = -1; //return value, -1 if no winner.
+        for (int i = 1; i < columns-1; i++) {
+            if (board[0][i] > 0) {
+                finishedC = false;
+            }
+            if (board[1][i] > 0)
+            {
+                finishedP = false;
+            }
         }
-        if (cpuCount <= 0 && playerCount > 0) //if cpu board state is 0 or less for whatever reason
+        if (finishedP || finishedC)
         {
-            finished = true;
-            //board[rows-1][columns-1] += playerCount; //add the remaining seeds in player row to player basked
-        }
-        else if (playerCount <= 0 && cpuCount > 0) //if player board state is 0 or less for whatever reason
-        {
-            finished = true;
-            //board[0][0] += cpuCount; //add the remaining seeds in the cpu row to the cpu basket
-        }
-        else if (playerCount <= 0 && cpuCount <= 0)
-        {
-            finished = true;
+            winner = findWinner();
         }
         assignHVal();
-        return finished;
+        return winner;
+    }
+
+    private int findWinner(){
+        int cpuTotal = 0;
+        int playerTotal = 0;
+        for (int i = 0; i < columns; i++)
+        {
+            cpuTotal += board[0][i];
+            playerTotal += board[1][i];
+        }
+        if (cpuTotal > playerTotal){
+            return 0; //cpu wins
+        }
+        else if (playerTotal > cpuTotal){
+            return 1; //player wins
+        }
+        else{
+            return 2; //in case of tie
+        }
     }
 
 }

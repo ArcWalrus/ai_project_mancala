@@ -14,9 +14,10 @@ public class MancalaDriver {
         int currPlayer = 1; //1 for player, 0 for cpu
 
         Board board2 = new Board(rows, columns, 1, startingSeeds);
+        board2.initializeBoard();
         Node<Board> n1 = new Node(board2);
         Tree tree = new Tree(n1, currPlayer);
-        n1 = tree.genTree(n1, currPlayer, 1);
+        n1 = tree.genTree(n1, currPlayer);
 
         boolean go = true;
         while (go) {
