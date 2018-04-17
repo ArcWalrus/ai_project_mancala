@@ -16,6 +16,15 @@ public class Board implements Cloneable {
         this.h_value = 0;
     }
 
+    private int[][] getBoard(){
+        return this.board;
+    }
+    public int getCurrRow(){
+        return this.currRow;
+    }
+    public int getStartingSeeds(){
+        return this.startingSeeds;
+    }
     public int getRows(){
         return this.rows;
     }
@@ -219,6 +228,17 @@ public class Board implements Cloneable {
         else{
             return 2; //in case of tie
         }
+    }
+
+    //returns a copy of the original board
+    public Board copyBoard(Board ogBoard){
+        Board nBoard = new Board(this.rows, this.columns, this.currRow, this.startingSeeds);
+        for (int i = 0; i < this.rows; i++){
+            for (int j = 0; j < this.columns; j++){
+                nBoard.getBoard()[i][j] = ogBoard.getBoard()[i][j];
+            }
+        }
+        return nBoard;
     }
 
 }
