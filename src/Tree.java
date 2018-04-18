@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Tree {
     private Node<Board> head;
     //private Node<Board> currNode;
@@ -20,13 +22,22 @@ public class Tree {
         //int numCols = currNode.getData().getCols();
         int numCols = actualBoard.getCols();
         int bestValue = -100;
-        int bestHole = 1;
+        int bestHole = -100;
+       // ArrayList<String> hValues = new ArrayList<>();
         for (int currHole = 1; currHole < numCols - 1; currHole++) {
             //if (currNode.getData().getHoleValue(currPlayer, currHole) > 0) {
+
+
             if (actualBoard.getHoleValue(currPlayer, currHole) > 0){
+
                 //Node<Board> move = new Node<>(currNode.getData().makeMove(currPlayer, currHole));
                 Board move = new Board(actualBoard.getRows(), actualBoard.getCols(),
                                         actualBoard.getCurrRow(), actualBoard.getStartingSeeds());
+
+//                for(int i=0; i<childHValues.size(); i++) {
+//                    hValues.add(childHValues.get(i));
+//                }
+
                 move = move.copyBoard(actualBoard);
                 move.makeMove(currPlayer, currHole);
                 if (currPlayer == 1) {
@@ -39,17 +50,33 @@ public class Tree {
                 //System.out.println("RUNNING MINIMAX");
                 value = minmax(move, currPlayer, depth-1);
                 //System.out.println("MINIMAX FINISHED");
-                if (value > bestValue){
-                    bestValue = value;
-                    bestHole = currHole;
+
+                MancalaDriver.hValues.set(currHole-1,Integer.toString(value));
+
+                if(currPlayer==0) {
+                    if (value > bestValue) {
+                        bestValue = value;
+                        bestHole = currHole;
+                    }
                 }
+                else {
+                    if (value < bestValue) {
+                        bestValue = value;
+                        bestHole = currHole;
+                    }
+                }
+            }
+            else {
+                MancalaDriver.hValues.set(currHole-1, "X");
             }
         }
         if (currPlayer == 0) {
             actualBoard.makeMove(currPlayer, bestHole);
+            MancalaDriver.hValues.set(MancalaDriver.hValues.size()-1,Integer.toString(bestHole));
         }
-        return value;
+        return bestValue;
     }
+
 
 
     //There might be a problem, there might not, God only knows.
