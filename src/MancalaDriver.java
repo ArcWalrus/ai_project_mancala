@@ -57,6 +57,9 @@ public class MancalaDriver {
                 System.out.println(hString + "\n****");
                 System.out.println("---> CPU chooses hole: " + cpuMove);
 
+                int cpuMoveResult = Integer.parseInt(cpuMove);
+                board.makeMove(0, cpuMoveResult );
+
 
                 if (board.checkIfWon() >= 0 && board.checkIfWon() < 2){
                     System.out.println("Winner! Player: " + board.checkIfWon());
@@ -76,7 +79,3 @@ public class MancalaDriver {
 
 
     }
-
-
-
-}
