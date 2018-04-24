@@ -22,7 +22,7 @@ public class Tree {
         //int numCols = currNode.getData().getCols();
         int numCols = actualBoard.getCols();
         int bestValue = -100;
-        int bestHole = -100;
+        int bestHole = 1;
        // ArrayList<String> hValues = new ArrayList<>();
         for (int currHole = 1; currHole < numCols - 1; currHole++) {
             //if (currNode.getData().getHoleValue(currPlayer, currHole) > 0) {
@@ -34,9 +34,9 @@ public class Tree {
                 Board move = new Board(actualBoard.getRows(), actualBoard.getCols(),
                                         actualBoard.getCurrRow(), actualBoard.getStartingSeeds());
 
-//                for(int i=0; i<childHValues.size(); i++) {
-//                    hValues.add(childHValues.get(i));
-//                }
+                                        // for(int i=0; i<childHValues.size(); i++) {
+                                            //hValues.add(childHValues.get(i));
+                                            //}
 
                 move = move.copyBoard(actualBoard);
                 move.makeMove(currPlayer, currHole);
@@ -66,9 +66,9 @@ public class Tree {
                     }
                 }
             }
-            else {
-                MancalaDriver.hValues.set(currHole-1, "X");
-            }
+           // else {
+               // MancalaDriver.hValues.set(currHole-1, "X");
+           // }
         }
         if (currPlayer == 0) {
             actualBoard.makeMove(currPlayer, bestHole);
@@ -96,13 +96,11 @@ public class Tree {
                     } else {
                         currPlayer = 1;
                     }
-
                     if (nextBoard != null) {
                         nextBoard = genTree(nextBoard, currPlayer);
                     }
                     currNode.addChild(nextBoard);
                 }
-
             }
             return currNode;
         }
