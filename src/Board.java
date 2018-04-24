@@ -212,8 +212,8 @@ public class Board implements Cloneable {
     }
 
     private int findWinner(){
-        int cpuTotal = 0;
-        int playerTotal = 0;
+        int cpuTotal = board[0][0];
+        int playerTotal = board[1][columns -1];
         for (int i = 0; i < columns; i++)
         {
             cpuTotal += board[0][i];
