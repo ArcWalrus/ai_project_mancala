@@ -63,9 +63,11 @@ public class MancalaDriver {
 
                 if (board.checkIfWon() >= 0 && board.checkIfWon() < 2){
                     System.out.println("Winner! Player: " + board.checkIfWon());
+                    go = false;
                 }
                 else if (board.checkIfWon() == 2){
                     System.out.println("TIE :/ ");
+                    go = false;
                 }
                 //System.out.println("Current h value: " + board.getHValue());
 
@@ -76,6 +78,5 @@ public class MancalaDriver {
                 go = false;
             }
         }
-
-
-    }
+     }
+}
